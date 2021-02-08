@@ -35,6 +35,9 @@ android {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
+    def ashley_version = "1.7.3"
+    implementation "com.badlogicgames.ashley:ashley:$ashley_version"
+
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
