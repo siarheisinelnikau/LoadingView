@@ -17,7 +17,6 @@ class MainActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )
 
-
         setContentView(R.layout.activity_main)
     }
 
