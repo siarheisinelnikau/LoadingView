@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="LoadingView">
+
+        <attr name="gradientStart" format="reference|color" />
+        <attr name="gradientEnd" format="reference|color" />
+
+        <attr name="backgroundLineAlpha" format="integer" />
+
+        <attr name="backgroundMaxSpeed" format="reference|dimension" />
+        <attr name="backgroundMinSpeed" format="reference|dimension" />
+
+        <attr name="backgroundMaxRadius" format="reference|dimension" />
+        <attr name="backgroundMinRadius" format="reference|dimension" />
+
+        <attr name="backgroundDensity" format="integer" />
+        <attr name="backgroundProximity" format="reference|dimension" />
+
+        <attr name="foregroundLineAlpha" format="integer" />
+
+        <attr name="foregroundMaxSpeed" format="reference|dimension" />
+        <attr name="foregroundMinSpeed" format="reference|dimension" />
+
+        <attr name="foregroundMaxRadius" format="reference|dimension" />
+        <attr name="foregroundMinRadius" format="reference|dimension" />
+
+        <attr name="foregroundDensity" format="integer" />
+        <attr name="foregroundProximity" format="reference|dimension" />
+
+    </declare-styleable>
+
+</resources>

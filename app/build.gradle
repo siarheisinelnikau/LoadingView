@@ -1,0 +1,40 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion 30
+    defaultConfig {
+        applicationId "com.loading.screen"
+        minSdkVersion 19
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    def appCompat_version = "1.2.0"
+    def fragment_version = "1.2.5"
+    def constraintLayout_version = "2.0.4"
+
+    // Kotlin
+    implementation "androidx.appcompat:appcompat:$appCompat_version"
+    implementation "androidx.fragment:fragment-ktx:$fragment_version"
+    implementation "com.android.support.constraint:constraint-layout:$constraintLayout_version"
+
+    implementation project(":modules:LoadingView")
+
+    testImplementation 'junit:junit:4.13.1'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
