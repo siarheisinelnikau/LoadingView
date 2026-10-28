@@ -9,7 +9,7 @@ class Pool<T>(private val creator: () -> T) {
             return creator()
         }
 
-        return list.removeLast()
+        return list.removeAt(list.lastIndex)
     }
 
     fun reset() = list.clear()
