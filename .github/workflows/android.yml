@@ -23,7 +23,11 @@ jobs:
       - uses: gradle/actions/setup-gradle@v6
         with:
           cache-provider: basic
-      - name: Install Android SDK
-        run: sdkmanager 'platforms;android-37.0' 'build-tools;36.0.0'
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          cmdline-tools-version: '16111833'
+          packages: 'platforms;android-37.0 build-tools;36.0.0'
+          log-accepted-android-sdk-licenses: false
       - name: Build, test and lint
         run: ./gradlew --no-daemon assembleDebug assembleRelease testDebugUnitTest lintDebug :app:assembleDebugAndroidTest
