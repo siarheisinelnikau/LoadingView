@@ -6,19 +6,20 @@ import com.badlogic.ashley.core.Family
 import com.badlogic.ashley.systems.IteratingSystem
 import com.loading.view.space.component.RenderComponent
 
-class RenderSystem : IteratingSystem(family) {
+class RenderSystem : IteratingSystem(Family.all(RenderComponent::class.java).get()) {
+    private var canvas: Canvas? = null
 
-    companion object {
-        private val family = Family.all(RenderComponent::class.java).get()
-    }
-
-    private lateinit var canvas: Canvas
-
-    fun setCanvas(canvas: Canvas) {
+    fun withCanvas(canvas: Canvas, update: () -> Unit) {
         this.canvas = canvas
+        try {
+            update()
+        } finally {
+            // A Canvas belongs to this draw call, not to the lifetime of the world.
+            this.canvas = null
+        }
     }
 
     override fun processEntity(entity: Entity, deltaTime: Float) {
-        RenderComponent.from(entity).renderer(entity, canvas)
+        canvas?.let { RenderComponent.from(entity).renderer(entity, it) }
     }
 }

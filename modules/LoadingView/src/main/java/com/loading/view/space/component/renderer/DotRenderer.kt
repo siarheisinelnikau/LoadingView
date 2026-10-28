@@ -34,10 +34,8 @@ class DotRenderer(
         val diff = maxRadius - minRadius
         val alpha = min(
             255f,
-            ((sc.radius - minRadius) / diff * alphaMultiplier).toInt() + minAlpha
+            (if (diff > 0f) (sc.radius - minRadius) / diff else 1f) * alphaMultiplier + minAlpha
         )
-
-        paint.alpha = alpha.toInt()
 
         if (sc.big) {
             paint.setARGB(alpha.toInt(), 255, 255, 0)

@@ -44,7 +44,9 @@ class PositionSystem(
                 position.x = width
                 speed.x = -speed.x
             }
+        }
 
+        when {
             position.y < 0f -> {
                 position.y = 0f
                 speed.y = -speed.y
