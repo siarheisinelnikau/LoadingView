@@ -1,5 +1,6 @@
 package com.loading.view.space
 
+import android.graphics.Canvas
 import com.badlogic.ashley.core.Engine
 import com.loading.view.ecs.util.FPS
 import com.loading.view.ecs.util.VectorFloat
@@ -24,14 +25,22 @@ class SpaceWorld private constructor(private val engine: Engine) {
             heightDp: Float,
             configuration: Configuration
         ): SpaceWorld {
+            require(width.isFinite() && width > 0f && height.isFinite() && height > 0f) {
+                "World dimensions must be finite and positive"
+            }
+            require(widthDp.isFinite() && widthDp > 0f && heightDp.isFinite() && heightDp > 0f) {
+                "World dimensions in dp must be finite and positive"
+            }
             val engine = Engine()
 
             // Fill with systems
 
             engine.addSystem(PositionSystem(width, height))
 
-            engine.addSystem(LinesSystem(configuration.backgroundProximity))
-            engine.addSystem(LinesSystem(configuration.foregroundProximity))
+            engine.addSystem(LinesSystem(
+                configuration.backgroundProximity,
+                configuration.foregroundProximity
+            ))
 
             engine.addSystem(
                 RotationSystem(
@@ -159,8 +168,8 @@ class SpaceWorld private constructor(private val engine: Engine) {
                 entity.add(
                     TransformComponent(
                         VectorFloat(
-                            Random.nextInt(1, width.toInt() - 1).toFloat(),
-                            Random.nextInt(1, height.toInt() - 1).toFloat()
+                            Random.nextFloat() * width,
+                            Random.nextFloat() * height
                         )
                     )
                 )
@@ -186,6 +195,19 @@ class SpaceWorld private constructor(private val engine: Engine) {
 
         engine.update(delta)
     }
+
+    fun draw(canvas: Canvas, animate: Boolean = true) {
+        renderSystem.withCanvas(canvas) {
+            if (animate) {
+                update()
+            } else {
+                resetTiming()
+                engine.update(0f)
+            }
+        }
+    }
+
+    fun resetTiming() = fps.reset()
 
     fun rotate() {
         rotationSystem.rotationRequested = true

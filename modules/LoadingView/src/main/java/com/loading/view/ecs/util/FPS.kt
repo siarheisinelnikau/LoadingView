@@ -1,48 +1,42 @@
 package com.loading.view.ecs.util
 
-import android.util.Log
-import com.loading.view.BuildConfig
-import kotlin.math.min
-
-class FPS {
-
-    companion object {
-        const val SECOND_MS = 1000
-    }
-
-    private var time = 0L
-    private var delta = 0f
-
-    private var fps = 0
+/** Monotonic animation clock. Long pauses never become large simulation steps. */
+class FPS(private val nanoTime: () -> Long = System::nanoTime) {
+    private var previousTime = 0L
+    private var hasFrame = false
+    private var intervalStart = 0L
     private var frames = 0
-
-    private var passedMs = 0L
+    private var delta = 0f
+    private var fps = 0
 
     fun onFrame() {
-        val oldTime = time
-        val newTime = System.currentTimeMillis()
-        time = newTime
-
-        delta = min(0.025f, (newTime - oldTime) / 1000f) // min 40 fps expected
-
-
-        if (frames == 0) {
-            passedMs = System.currentTimeMillis()
+        val now = nanoTime()
+        val previous = previousTime
+        previousTime = now
+        if (!hasFrame) {
+            hasFrame = true
+            intervalStart = now
+            delta = 0f
+            return
         }
 
-        ++frames
-
-        if (System.currentTimeMillis() - passedMs > SECOND_MS) {
-            fps = frames
+        delta = ((now - previous) / 1_000_000_000f).coerceIn(0f, 0.025f)
+        frames++
+        val elapsed = now - intervalStart
+        if (elapsed >= 1_000_000_000L) {
+            fps = (frames * 1_000_000_000.0 / elapsed).toInt()
             frames = 0
-
-            if (BuildConfig.DEBUG) {
-                Log.d(javaClass.simpleName, getFps().toString())
-            }
+            intervalStart = now
         }
+    }
+
+    fun reset() {
+        hasFrame = false
+        frames = 0
+        delta = 0f
+        fps = 0
     }
 
     fun getDelta(): Float = delta
-
     fun getFps(): Int = fps
 }
